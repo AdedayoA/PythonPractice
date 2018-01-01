@@ -20,13 +20,20 @@ def printResults(data):
   print('\nLocale from environment:', locale.getlocale())
 
 def user_input_currency():
-  currency = ["btcusd", "btceur", "eurusd", "xrpusd", "xrpeur", "xrpbtc", "ltcusd", "ltceur", "ltcbtc", "ethusd", "etheur", "ethbtc", "bchusd", "bcheur", "bchbtc"]
-  user_input = input("What magnitude of earthquakes would you like to view:\n1) BTCUSD\n2) BTCEUR \n3) EURUSD\n4) XRPUSD \n5) XRPEUR\n6) XRPBTC \n7) LTCUSD \n8) LTCEUR\n9) LTCBTC \n10) ETHUSD\n11) ETHEUR \n12) ETHBTC\n13) BCHUSD \n14) BCHEUR\n15) BCHBTC\n")
-  if user_input in currency:
-    print ("Found it")
-  if user_input not in currency:
-    print ("Did not find it")
-    user_input = currency[0]
+  search = False 
+  while (search != True):
+    currency = ["btcusd", "btceur", "eurusd", "xrpusd", "xrpeur", "xrpbtc", "ltcusd", "ltceur", "ltcbtc", "ethusd", "etheur", "ethbtc", "bchusd", "bcheur", "bchbtc"]
+
+    user_input = input("Which crypto currency would you like more information on?:\n1) BTCUSD\n2) BTCEUR \n3) EURUSD\n4) XRPUSD \n5) XRPEUR\n6) XRPBTC \n7) LTCUSD \n8) LTCEUR\n9) LTCBTC \n10) ETHUSD\n11) ETHEUR \n12) ETHBTC\n13) BCHUSD \n14) BCHEUR\n15) BCHBTC\n")
+
+    if user_input in currency:
+      print ("Found it")
+      search = True
+
+    if user_input not in currency:
+      print ("Did not find it")
+      search = False
+
   return user_input
 
 
