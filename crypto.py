@@ -1,33 +1,32 @@
 import urllib.request 
 import json
 import locale
-
-locale.setlocale( locale.LC_ALL, '' )
-locale.currency( 1234.50, grouping = True )
+from money.money import Money
+from money.currency import Currency
+import datetime
+locale.setlocale( locale.LC_ALL, 'ko_KR')
 
 def printResults(data):
-  print('\nLocale from environment:', locale.getlocale())
   theJSON = json.loads(data)
-  print("Last Price: " + theJSON["last"]
-    + "\nLast 24 hours price high: " + theJSON["high"]
-    + "\nast 24 hours price low " + theJSON["low"]
-    + "\nLast 24 hours volume weighted average price: " + theJSON["vwap"]
-    + "\nLast 24 hours volume: " + theJSON["volume"]
-    + "\nHighest buy order " + theJSON["bid"]
-    + "\nLowest sell order: " + theJSON["ask"]
-    + "\nUnix timestamp date and time: " + theJSON["timestamp"]
-    + "\nFirst price of the day: " + theJSON["open"])
-  print('\nLocale from environment:', locale.getlocale())
+  print("Last Price: " + Money("{:.2f}".format(float(theJSON["last"])), Currency.USD).format('en_US')
+    + "\nLast 24 hours price high: " + Money("{:.2f}".format(float(theJSON["high"])), Currency.USD).format('en_US')
+    + "\nLast 24 hours price low " + Money("{:.2f}".format(float(theJSON["low"])), Currency.USD).format('en_US')
+    + "\nLast 24 hours volume weighted average price: " + Money("{:.2f}".format(float(theJSON["vwap"])), Currency.USD).format('en_US')
+    + "\nLast 24 hours volume: " + "{:,}".format(float(theJSON["volume"]))
+    + "\nHighest buy order " + Money("{:.2f}".format(float(theJSON["bid"])), Currency.USD).format('en_US')
+    + "\nLowest sell order: " + Money("{:.2f}".format(float(theJSON["ask"])), Currency.USD).format('en_US')
+    + "\nLast Updated: " + datetime.datetime.fromtimestamp(int(theJSON["timestamp"])).strftime('%A, %d %B %Y %I:%M%p') 
+    + "\nFirst price of the day: " + Money("{:.2f}".format(float(theJSON["open"])), Currency.USD).format('en_US'))
 
 def user_input_currency():
   search = False 
   while (search != True):
-    currency = ["btcusd", "btceur", "eurusd", "xrpusd", "xrpeur", "xrpbtc", "ltcusd", "ltceur", "ltcbtc", "ethusd", "etheur", "ethbtc", "bchusd", "bcheur", "bchbtc"]
+    currency = ["btcusd", "btceur", "eurusd", "xrpusd", "xrpeur", "xrpbtc", "ltcusd", "ltceur", "ltcbtc", "ethusd", "etheur", "ethbtc", "bchusd", "bcheur", "bchbtc"] 
 
     user_input = input("Which crypto currency would you like more information on?:\n1) BTCUSD\n2) BTCEUR \n3) EURUSD\n4) XRPUSD \n5) XRPEUR\n6) XRPBTC \n7) LTCUSD \n8) LTCEUR\n9) LTCBTC \n10) ETHUSD\n11) ETHEUR \n12) ETHBTC\n13) BCHUSD \n14) BCHEUR\n15) BCHBTC\n").lower()
 
     if user_input in currency:
-      print ("Found it")
+      print ("Found it, information on " + user_input)
       search = True
 
     if user_input not in currency:
@@ -43,8 +42,13 @@ def main():
 
     # Open the URL and read the data
   webUrl = urllib.request.urlopen(urlData)
-  print (webUrl.getcode())
-  if (webUrl.getcode() == 200):
+  
+  if (webUrl.getcode() == 400):
+    print("The request with the provided information was invalid or cannot be retrieved.")
+  elif (webUrl.getcode() == 404):
+    print("The page no longer exists, not data to retrieve")
+  elif (webUrl.getcode() == 200):
+    print("Success!")
     data = webUrl.read()
     data = data.decode("utf-8") # in Python 3.x we need to explicitly decode the response to a string
     # print out our customized results
