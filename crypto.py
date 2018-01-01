@@ -18,11 +18,20 @@ def printResults(data):
     + "\nUnix timestamp date and time: " + theJSON["timestamp"]
     + "\nFirst price of the day: " + theJSON["open"])
   print('\nLocale from environment:', locale.getlocale())
-  
+
+def user_input_currency():
+  currency = ["btcusd", "btceur", "eurusd", "xrpusd", "xrpeur", "xrpbtc", "ltcusd", "ltceur", "ltcbtc", "ethusd", "etheur", "ethbtc", "bchusd", "bcheur", "bchbtc"]
+  user_input = input("What magnitude of earthquakes would you like to view:\n1) BTCUSD\n2) BTCEUR \n3) EURUSD\n4) XRPUSD \n5) XRPEUR\n6) XRPBTC \n7) LTCUSD \n8) LTCEUR\n9) LTCBTC \n10) ETHUSD\n11) ETHEUR \n12) ETHBTC\n13) BCHUSD \n14) BCHEUR\n15) BCHBTC\n")
+  if user_input in currency:
+    print ("Found it")
+  if user_input not in currency:
+    print ("Did not find it")
+    user_input = currency[0]
+  return user_input
 
 
 def main():
-  currency_pair = "xrpusd"
+  currency_pair = user_input_currency()
   urlData = "https://www.bitstamp.net/api/v2/ticker/" + currency_pair
 
     # Open the URL and read the data
