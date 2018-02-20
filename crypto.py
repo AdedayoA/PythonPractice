@@ -1,11 +1,10 @@
 import urllib.request 
 import json
-import locale
 from money.money import Money
 from money.currency import Currency
 import datetime
-locale.setlocale( locale.LC_ALL, 'ko_KR')
 
+##Returns the jSON returned from webpage and prints out the data in US currency, but can be switched by changing the locale.
 def printResults(data):
   theJSON = json.loads(data)
   print("Last Price: " + Money("{:.2f}".format(float(theJSON["last"])), Currency.USD).format('en_US')
@@ -18,6 +17,7 @@ def printResults(data):
     + "\nLast Updated: " + datetime.datetime.fromtimestamp(int(theJSON["timestamp"])).strftime('%A, %d %B %Y %I:%M%p') 
     + "\nFirst price of the day: " + Money("{:.2f}".format(float(theJSON["open"])), Currency.USD).format('en_US'))
 
+##Returns the crypto/currency the user picks
 def user_input_currency():
   search = False 
   while (search != True):
@@ -35,7 +35,6 @@ def user_input_currency():
 
   return user_input
 
-
 def main():
   currency_pair = user_input_currency()
   urlData = "https://www.bitstamp.net/api/v2/ticker/" + currency_pair
@@ -50,8 +49,7 @@ def main():
   elif (webUrl.getcode() == 200):
     print("Success!")
     data = webUrl.read()
-    data = data.decode("utf-8") # in Python 3.x we need to explicitly decode the response to a string
-    # print out our customized results
+    data = data.decode("utf-8")
     printResults(data)
   else:
     print ("Received an error from server, cannot retrieve results " + str(webUrl.getcode()))
