@@ -1,12 +1,18 @@
-import urllib.request 
-import json
+import urllib.request, json, datetime, os, time, sys
 from money.money import Money
 from money.currency import Currency
-import datetime
+from progress.bar import ShadyBar
+def progress_bar():
+  bar = ShadyBar('Processing', max=100)
+  for i in range(100):
+    bar.next()
+    time.sleep(.025)
+  bar.finish()
 
 ##Returns the jSON returned from webpage and prints out the data in US currency, but can be switched by changing the locale.
 def printResults(data):
   theJSON = json.loads(data)
+  progress_bar()
   print("Last Price: " + Money("{:.2f}".format(float(theJSON["last"])), Currency.USD).format('en_US')
     + "\nLast 24 hours price high: " + Money("{:.2f}".format(float(theJSON["high"])), Currency.USD).format('en_US')
     + "\nLast 24 hours price low " + Money("{:.2f}".format(float(theJSON["low"])), Currency.USD).format('en_US')
@@ -26,6 +32,7 @@ def user_input_currency():
     user_input = input("Which crypto currency would you like more information on?:\n1) BTCUSD\n2) BTCEUR \n3) EURUSD\n4) XRPUSD \n5) XRPEUR\n6) XRPBTC \n7) LTCUSD \n8) LTCEUR\n9) LTCBTC \n10) ETHUSD\n11) ETHEUR \n12) ETHBTC\n13) BCHUSD \n14) BCHEUR\n15) BCHBTC\n").lower()
 
     if user_input in currency:
+      os.system('clear')
       print ("Found it, information on " + user_input)
       search = True
 
