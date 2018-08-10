@@ -2,11 +2,12 @@ import urllib.request, json, datetime, os, time, sys
 from money.money import Money
 from money.currency import Currency
 from progress.bar import ShadyBar
+
 def progress_bar():
-  bar = ShadyBar('Processing', max=100)
-  for i in range(100):
+  bar = ShadyBar('Processing Crypto-analysis', max=1000, suffix='%(percent)d%% | %(eta)d seconds remaining |')
+  for i in range(1000):
     bar.next()
-    time.sleep(.025)
+    time.sleep(.015)
   bar.finish()
 
 ##Returns the jSON returned from webpage and prints out the data in US currency, but can be switched by changing the locale.
